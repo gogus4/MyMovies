@@ -9,6 +9,8 @@
  */
 require 'Slim/Slim.php';
 
+const API_KEY = "Uy2wyWu22R9vzTYpn97E8pWQYK245pp2";
+
 \Slim\Slim::registerAutoloader();
 
 /**
@@ -160,6 +162,55 @@ $app->delete(
     }
 );
 
+$app->get('/getMovies/:key', function ($key) {
+    if($key == API_KEY)
+    {
+        $array = array();
+        $i = 0;
+
+        getMovies(".",$array,$i,true);
+    }
+
+    else
+    {
+        echo "Error : Invalid API key";
+    }
+});
+
+function getMovies($path,&$array,&$i,$valueReturn)
+{
+    if ($handle = opendir($path)) 
+    {
+        while (false !== ($entry = readdir($handle))) 
+        {
+            $i = $i + 1;
+
+            if($entry != "." && $entry != "..")
+            {
+                if(is_dir($path. "/".$entry))
+                {
+                    getMovies($path . "/" .$entry,$array,$i,false);
+                }
+
+                else 
+                {
+                    $movie = new Movie();
+                    $movie->name = $entry;
+                    $newPath = str_replace(".", "http://localhost",$path);
+                    $movie->path = $newPath. "/".$entry;
+
+                    array_push($array, $movie);
+                }
+            }
+        }
+
+        closedir($handle);
+    }
+
+    if($valueReturn)
+        echo json_encode($array);
+}
+
 /**
  * Step 4: Run the Slim application
  *
@@ -167,3 +218,13 @@ $app->delete(
  * and returns the HTTP response to the HTTP client.
  */
 $app->run();
+
+class Movie
+{
+    public $name;
+    public $path;
+
+    public function __toString() {
+        return $this->name;
+    }
+}
