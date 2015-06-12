@@ -168,7 +168,7 @@ $app->get('/getMovies/:key', function ($key) {
         $array = array();
         $i = 0;
 
-        getMovies(".",$array,$i,true);
+        getMovies("..",$array,$i,true);
     }
 
     else
@@ -179,36 +179,42 @@ $app->get('/getMovies/:key', function ($key) {
 
 function getMovies($path,&$array,&$i,$valueReturn)
 {
-    if ($handle = opendir($path)) 
+    if($path != '../$RECYCLE.BIN' && $path != "../Logiciels" && $path != "../rest" && $path != "../System Volume Information" && $path != "../Mangas") 
     {
-        while (false !== ($entry = readdir($handle))) 
+        if ($handle = opendir($path)) 
         {
-            $i = $i + 1;
+            while (false !== ($entry = readdir($handle))) 
+            {           
+                $i = $i + 1;
 
-            if($entry != "." && $entry != "..")
-            {
-                if(is_dir($path. "/".$entry))
-                {
-                    getMovies($path . "/" .$entry,$array,$i,false);
-                }
+                if($entry != "." && $entry != "..")
+                {                    
+                    if(is_dir($path."/".$entry))
+                    {
+                        getMovies($path . "/" .$entry,$array,$i,false);
+                    }
 
-                else 
-                {
-                    $movie = new Movie();
-                    $movie->name = $entry;
-                    $newPath = str_replace(".", "http://localhost",$path);
-                    $movie->path = $newPath. "/".$entry;
+                    else
+                    {
+                        $movie = new Movie();
+                        $movie->name = $entry;
+                        $newPath = str_replace("..", "http://localhost:8080",$path);
+                        $movie->path = $newPath. "/".$entry;
 
-                    array_push($array, $movie);
+                        array_push($array, $movie);
+                    }
                 }
             }
-        }
 
-        closedir($handle);
+            closedir($handle);
+        }
     }
 
     if($valueReturn)
-        echo json_encode($array);
+    {
+        //print_r($array);
+        echo json_encode($array);      
+    }
 }
 
 /**
