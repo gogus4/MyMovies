@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Gogus.Helper;
+using Gogus.View;
+using Gogus.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,8 +18,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
-
 namespace Gogus
 {
     /// <summary>
@@ -24,9 +25,6 @@ namespace Gogus
     /// </summary>
     sealed partial class App : Application
     {
-        /// <summary>
-        /// Allows tracking page views, exceptions and other telemetry through the Microsoft Application Insights service.
-        /// </summary>
         public static Microsoft.ApplicationInsights.TelemetryClient TelemetryClient;
 
         /// <summary>
@@ -35,8 +33,6 @@ namespace Gogus
         /// </summary>
         public App()
         {
-            TelemetryClient = new Microsoft.ApplicationInsights.TelemetryClient();
-
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -46,15 +42,16 @@ namespace Gogus
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            await MainPageViewModel.Instance.GetDatas();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -83,6 +80,7 @@ namespace Gogus
                 // parameter
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+
             // Ensure the current window is active
             Window.Current.Activate();
         }

@@ -1,0 +1,101 @@
+﻿<Page
+    x:Class="Gogus.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns:common="using:Gogus.Common"
+    xmlns:local="using:Gogus"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource
+            x:Name="groupedItemsViewSource"
+            Source="{Binding Items}"
+            IsSourceGrouped="true"
+            ItemsPath="Items"/>
+
+        <common:MyDataTemplateSelector x:Key="MyDataTemplateSelector"
+        LargeMovieTemplate="{StaticResource LargeMovieDataTemplate}"
+        MediumMovieTemplate="{StaticResource MediumMovieDataTemplate}">
+        </common:MyDataTemplateSelector>
+    </Page.Resources>
+
+    <SplitView x:Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="150">
+        <SplitView.Pane>
+            <StackPanel Background="Gray">
+                <Button x:Name="ActionShowMenu" Foreground="White" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                    Width="50" Height="50" FontSize="20" Background="Transparent" Click="ActionShowMenu_Click"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="ActionHome" FontSize="20" Foreground="White" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;" Width="50" Height="50" Background="Transparent"/>
+                    <TextBlock Text="Accueil" HorizontalAlignment="Center" FontSize="18" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Center" />
+                </StackPanel>
+
+            </StackPanel>
+        </SplitView.Pane>
+        <SplitView.Content>
+            <Grid Background="#FF404040">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.15*"/>
+                    <RowDefinition Height="0.85*"/>
+                </Grid.RowDefinitions>
+
+                <Image Source="ms-appx:///Assets/MainLogo.png" Height="65" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
+
+                <StackPanel Orientation="Horizontal" Background="White" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                    <TextBox x:Name="SearchMovie" Visibility="Collapsed" FontFamily="Segoe UI Light" BorderBrush="Transparent" FontSize="16" Width="250"/>
+                    <Button x:Name="ActionSearchMovie" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Center" Background="Black" Foreground="White" Content="&#xe11a;" FontSize="16"/>
+                </StackPanel>
+
+                <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Row="1">
+                    <common:VariableGrid
+                x:Name="itemGridView"
+                Margin="20"
+                AutomationProperties.AutomationId="ItemGridView"
+                AutomationProperties.Name="Grouped Items"
+                ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
+                ItemTemplateSelector="{StaticResource MyDataTemplateSelector}">
+
+                        <common:VariableGrid.ItemContainerStyle>
+                            <Style TargetType="FrameworkElement">
+                                <Setter Property="Margin" Value="0 0 10 10"/>
+                            </Style>
+                        </common:VariableGrid.ItemContainerStyle>
+
+                        <common:VariableGrid.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </common:VariableGrid.ItemsPanel>
+                        
+                        <common:VariableGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                        AutomationProperties.Name="Group Title"
+                                           FontFamily="Segoe UI"
+                                            Foreground="LightGray"
+                                            FontSize="16"
+                                            Margin="0,0,0,10"
+                                        Text="{Binding Title}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                                <GroupStyle.Panel>
+                                    <ItemsPanelTemplate>
+                                        <VariableSizedWrapGrid ItemHeight="135" ItemWidth="200" Orientation="Vertical" MaximumRowsOrColumns="3"/>
+                                    </ItemsPanelTemplate>
+                                </GroupStyle.Panel>
+                            </GroupStyle>
+                        </common:VariableGrid.GroupStyle>
+                    </common:VariableGrid>
+                </ScrollViewer>
+
+            </Grid>
+        </SplitView.Content>
+    </SplitView>
+</Page>

@@ -197,9 +197,9 @@ function getMovies($path,&$array,&$i,$valueReturn)
                     else
                     {
                         $movie = new Movie();
-                        $movie->name = $entry;
+                        $movie->Name = $entry;
                         $newPath = str_replace("..", "http://localhost:8080",$path);
-                        $movie->path = $newPath. "/".$entry;
+                        $movie->Path = $newPath. "/".$entry;
 
                         array_push($array, $movie);
                     }
@@ -227,10 +227,10 @@ $app->run();
 
 class Movie
 {
-    public $name;
-    public $path;
+    public $Name;
+    public $Path;
 
     public function __toString() {
-        return $this->name;
+        return $this->Name;
     }
 }
