@@ -42,6 +42,18 @@
                     <RowDefinition Height="0.85*"/>
                 </Grid.RowDefinitions>
 
+                <Grid x:Name="HiddenPage" Background="LightGray" Opacity="0.3" Grid.ColumnSpan="2" Canvas.ZIndex="2" Visibility="Collapsed"/>
+
+                <Border x:Name="LoadDatas" Grid.RowSpan="2" Canvas.ZIndex="2" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="DarkRed" BorderThickness="2" Visibility="Collapsed" Background="White" Width="950" Height="255" >
+                    <Grid>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="38" Text="Mise à jour des données en cours ..." Foreground="DarkRed" Margin="20,10,0,0" />
+                            <TextBlock Text="Merci de patienter." Foreground="DarkRed" FontSize="36" Margin="20,10,0,0"/>
+                            <ProgressRing BorderBrush="Blue" Margin="0,5,0,0" Foreground="DarkRed" Height="120" Width="120" IsActive="True"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
                 <Image Source="ms-appx:///Assets/MainLogo.png" Height="65" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
 
                 <StackPanel Orientation="Horizontal" Background="White" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center" >
@@ -56,7 +68,7 @@
                 AutomationProperties.AutomationId="ItemGridView"
                 AutomationProperties.Name="Grouped Items"
                 ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-                ItemTemplateSelector="{StaticResource MyDataTemplateSelector}">
+                ItemTemplateSelector="{StaticResource MyDataTemplateSelector}" Tapped="itemGridView_Tapped">
 
                         <common:VariableGrid.ItemContainerStyle>
                             <Style TargetType="FrameworkElement">
@@ -69,7 +81,7 @@
                                 <VirtualizingStackPanel Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </common:VariableGrid.ItemsPanel>
-                        
+
                         <common:VariableGrid.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>

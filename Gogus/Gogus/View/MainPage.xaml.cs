@@ -1,4 +1,5 @@
 ﻿using Gogus.Helper;
+using Gogus.Model;
 using Gogus.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,12 @@ namespace Gogus.View
         private void ActionShowMenu_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
+
+        private void itemGridView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MainPageViewModel.Instance.CurrentMovie = itemGridView.SelectedItem as Movie;
+            this.Frame.Navigate(typeof(ViewMovie));
         }
     }
 }
