@@ -1,4 +1,5 @@
 ﻿using Gogus.Model;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,13 @@ namespace Gogus.Model
         public string id { get; set; }
         public string title { get; set; }
         public string backdrop_path { get; set; }
+
+        [Ignore]
         public List<string> genre_ids { get; set; }
+
+        // Using for SQLite
+        public string genre { get; set; }
+
         public string poster_path { get; set; }
         public string vote_average { get; set; }
 

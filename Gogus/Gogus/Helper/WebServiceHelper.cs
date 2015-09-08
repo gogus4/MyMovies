@@ -37,6 +37,8 @@ namespace Gogus.Helper
         {
             var movies = await HttpRequestHelper.Instance.FillListObjectWithJson<Movie>(MainPageViewModel.Instance.Movies, "http://localhost:8080/rest/getMovies/Uy2wyWu22R9vzTYpn97E8pWQYK245pp2");
 
+            // Delta between movies and moviesDB to do
+
             foreach (var movie in movies)
             {
                 try
@@ -50,17 +52,23 @@ namespace Gogus.Helper
                     if (result.results.Count > 0)
                     {
                         result.results[0].poster_path = "http://image.tmdb.org/t/p/w500" + result.results[0].poster_path;
-                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre_ids[0]).FirstOrDefault().name;
+
+                        // Using for DB
+                        result.results[0].genre = result.results[0].genre_ids[0];
+
+                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault().name;
                         result.results[0].Path = movie.Path;
                         result.results[0].Name = movie.Name;
-
+                        
                         MainPageViewModel.Instance.Movies.Add(result.results[0]);
+                        SQLiteHelper.Instance.InsertMovieDB(result.results[0]);
                     }
 
                     else
                     {
                         movie.Category = "Inclassable";
                         MainPageViewModel.Instance.Movies.Add(movie);
+                        SQLiteHelper.Instance.InsertMovieDB(movie);
                     }
                 }
                 catch (Exception E)

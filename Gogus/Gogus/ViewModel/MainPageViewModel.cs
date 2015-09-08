@@ -1,5 +1,6 @@
 ﻿using Gogus.Helper;
 using Gogus.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,18 +33,27 @@ namespace Gogus.ViewModel
             Movies = new List<Movie>();
         }
 
-        public async Task GetDatas()
+        public async Task<Boolean> GetDatas()
         {
-            // Call to web service to get all genre
-            await WebServiceHelper.Instance.GetCategories();
+            try
+            {
+                // Call to web service to get all genre
+                await WebServiceHelper.Instance.GetCategories();
 
-            // Call to web service class to get information about movies
-            await WebServiceHelper.Instance.GetMovies();
+                // Call to web service class to get information about movies
+                //await WebServiceHelper.Instance.GetMovies();
 
-            var moviesByCategories = Movies.OrderBy(x=> x.title).GroupBy(x => x.Category)
-                .Select(x => new MovieCategory { Title = x.Key, Items = x.ToList() });
+                 var moviesByCategories = Movies.OrderBy(x => x.title).GroupBy(x => x.Category)
+                    .Select(x => new MovieCategory { Title = x.Key, Items = x.ToList() });
 
-            Items = moviesByCategories.OrderBy(x => x.Title).ToList();
+                Items = moviesByCategories.OrderBy(x => x.Title).ToList();
+
+                return true;
+            }
+            catch(Exception E)
+            {
+                return false;
+            }
         }
     }
 }

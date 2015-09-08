@@ -1,4 +1,5 @@
 ﻿using Gogus.Helper;
+using Gogus.Model;
 using Gogus.View;
 using Gogus.ViewModel;
 using System;
@@ -50,6 +51,12 @@ namespace Gogus
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            await SQLiteHelper.Instance.CreateTableMovieDB();
+            MainPageViewModel.Instance.Movies = await SQLiteHelper.Instance.GetMoviesDB();
+
+            if (MainPageViewModel.Instance.Movies == null)
+                MainPageViewModel.Instance.Movies = new List<Movie>();
 
             await MainPageViewModel.Instance.GetDatas();
 

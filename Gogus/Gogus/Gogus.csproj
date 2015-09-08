@@ -97,10 +97,13 @@
     <Compile Include="Common\MyDataTemplateSelector.cs" />
     <Compile Include="Common\VariableGrid.cs" />
     <Compile Include="Helper\HttpRequestHelper.cs" />
+    <Compile Include="Helper\SQLiteHelper.cs" />
     <Compile Include="Helper\WebServiceHelper.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\TemplateCategoryWebService.cs" />
     <Compile Include="Model\TemplateWebService.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,9 @@
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
