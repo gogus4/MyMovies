@@ -10,6 +10,8 @@ namespace Gogus.ViewModel
     public class MainPageViewModel
     {
         public List<Movie> Movies { get; set; }
+        public List<Movie> MoviesDB { get; set; }
+
         public List<Category> Categories { get; set; }
 
         private static MainPageViewModel _instance { get; set; }
@@ -31,6 +33,7 @@ namespace Gogus.ViewModel
         public MainPageViewModel()
         {
             Movies = new List<Movie>();
+            MoviesDB = new List<Movie>();
         }
 
         public async Task<Boolean> GetDatas()
@@ -41,9 +44,9 @@ namespace Gogus.ViewModel
                 await WebServiceHelper.Instance.GetCategories();
 
                 // Call to web service class to get information about movies
-                //await WebServiceHelper.Instance.GetMovies();
+                await WebServiceHelper.Instance.GetMovies();
 
-                 var moviesByCategories = Movies.OrderBy(x => x.title).GroupBy(x => x.Category)
+                var moviesByCategories = Movies.OrderBy(x => x.title).GroupBy(x => x.Category)
                     .Select(x => new MovieCategory { Title = x.Key, Items = x.ToList() });
 
                 Items = moviesByCategories.OrderBy(x => x.Title).ToList();

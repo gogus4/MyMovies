@@ -30,5 +30,10 @@ namespace Gogus.View
             PlayMovie.Source = new Uri(MainPageViewModel.Instance.CurrentMovie.Path);
             PlayMovie.Play();
         }
+
+        private void GoBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
     }
 }

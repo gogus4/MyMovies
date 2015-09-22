@@ -37,5 +37,11 @@ namespace Gogus.View
             MainPageViewModel.Instance.CurrentMovie = itemGridView.SelectedItem as Movie;
             this.Frame.Navigate(typeof(ViewMovie));
         }
+
+        private async void Refresh_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MainPageViewModel.Instance.Movies = new List<Movie>();
+            await MainPageViewModel.Instance.GetDatas();
+        }
     }
 }

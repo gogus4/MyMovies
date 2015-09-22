@@ -8,8 +8,16 @@
     mc:Ignorable="d">
 
     <Grid Background="#FF404040">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.9*"/>
+        </Grid.RowDefinitions>
+        
+        <Button x:Name="GoBack" Grid.Row="0" Content="Go Back" Click="GoBack_Click"/>
+
         <MediaElement x:Name="PlayMovie" Height="300"
-                Width="640"
-                AreTransportControlsEnabled="True"/>
+                      Width="640"
+                      Grid.Row="1"
+                      AreTransportControlsEnabled="True"/>
     </Grid>
 </Page>

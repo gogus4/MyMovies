@@ -22,7 +22,7 @@
         </common:MyDataTemplateSelector>
     </Page.Resources>
 
-    <SplitView x:Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="150">
+    <SplitView x:Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="250">
         <SplitView.Pane>
             <StackPanel Background="Gray">
                 <Button x:Name="ActionShowMenu" Foreground="White" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
@@ -31,6 +31,11 @@
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="ActionHome" FontSize="20" Foreground="White" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;" Width="50" Height="50" Background="Transparent"/>
                     <TextBlock Text="Accueil" HorizontalAlignment="Center" FontSize="18" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel x:Name="Refresh" Orientation="Horizontal" Tapped="Refresh_Tapped">
+                    <Button x:Name="ActionRefresh" FontSize="20" Foreground="White" FontFamily="Segoe MDL2 Assets" Content="&#xE117;" Width="50" Height="50" Background="Transparent"/>
+                    <TextBlock Text="Rafraichir les données" HorizontalAlignment="Center" FontSize="18" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Center" />
                 </StackPanel>
 
             </StackPanel>
@@ -92,8 +97,12 @@
                                            FontFamily="Segoe UI"
                                             Foreground="LightGray"
                                             FontSize="16"
-                                            Margin="0,0,0,10"
-                                        Text="{Binding Title}"/>
+                                            Margin="0,0,0,10">
+                                                <Run Text="{Binding Title}"/>
+                                                <Run Text="("/>
+                                                <Run Text="{Binding Count}"/>
+                                                <Run Text=")"/>
+                                            </TextBlock>
                                         </Grid>
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>

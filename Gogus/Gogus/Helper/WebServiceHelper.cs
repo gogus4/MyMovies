@@ -33,13 +33,27 @@ namespace Gogus.Helper
             MainPageViewModel.Instance.Categories = resultCategories.genres;
         }
 
+        private List<Movie> DeltaWithDB(List<Movie> movies)
+        {
+            var deltaDBMovies = new List<Movie>();
+
+            // Delta between movies and moviesDB to do
+            foreach (var movie in movies)
+            {
+                if (MainPageViewModel.Instance.Movies.Where(x => x.Name == movie.Name).FirstOrDefault() == null)
+                    deltaDBMovies.Add(movie);
+            }
+
+            return deltaDBMovies;
+        }
+
         public async Task GetMovies()
         {
             var movies = await HttpRequestHelper.Instance.FillListObjectWithJson<Movie>(MainPageViewModel.Instance.Movies, "http://localhost:8080/rest/getMovies/Uy2wyWu22R9vzTYpn97E8pWQYK245pp2");
 
-            // Delta between movies and moviesDB to do
+            var deltaDBMovies = DeltaWithDB(movies);
 
-            foreach (var movie in movies)
+            foreach (var movie in deltaDBMovies)
             {
                 try
                 {
@@ -54,12 +68,14 @@ namespace Gogus.Helper
                         result.results[0].poster_path = "http://image.tmdb.org/t/p/w500" + result.results[0].poster_path;
 
                         // Using for DB
-                        result.results[0].genre = result.results[0].genre_ids[0];
+                        var genre = result.results[0].genre != null ? result.results[0].genre_ids[0] : "";
 
-                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault().name;
+                        //result.results[0].genre = result.results[0].genre_ids[0];
+
+                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault() != null ? MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault().name : "Inclassable";
                         result.results[0].Path = movie.Path;
                         result.results[0].Name = movie.Name;
-                        
+
                         MainPageViewModel.Instance.Movies.Add(result.results[0]);
                         SQLiteHelper.Instance.InsertMovieDB(result.results[0]);
                     }
