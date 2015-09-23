@@ -11,6 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -66,6 +67,25 @@ namespace Gogus.Helper
             }
 
             return obToFill;
+        }
+
+        public async Task<StorageFile> DownloadFileAsync(Uri uri, string filename)
+        {
+            try
+            {
+                using (var fileStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(filename, CreationCollisionOption.ReplaceExisting))
+                {
+                    var webStream = await new HttpClient().GetStreamAsync(uri);
+                    await webStream.CopyToAsync(fileStream);
+                    webStream.Dispose();
+                }
+
+                return await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
+            }
+            catch (Exception E)
+            {
+                return null;
+            }
         }
     }
 }

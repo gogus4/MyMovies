@@ -43,5 +43,35 @@ namespace Gogus.View
             MainPageViewModel.Instance.Movies = new List<Movie>();
             await MainPageViewModel.Instance.GetDatas();
         }
+
+        private void ActionSearchMovie_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (SearchMovie.Visibility == Visibility.Visible)
+                SearchMovie.Visibility = Visibility.Collapsed;
+
+            else
+                SearchMovie.Visibility = Visibility.Visible;
+        }
+
+        private void SearchMovie_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            SearchMovie.Visibility = Visibility.Collapsed;
+        }
+
+        private void SearchMovie_SuggestionsRequested(SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args)
+        {
+            string queryText = args.QueryText;
+            if (!string.IsNullOrEmpty(queryText))
+            {
+                Windows.ApplicationModel.Search.SearchSuggestionCollection suggestionCollection = args.Request.SearchSuggestionCollection;
+                foreach (var movieSuggestion in MainPageViewModel.Instance.Movies)
+                {
+                    if (movieSuggestion.Name.StartsWith(queryText, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        suggestionCollection.AppendQuerySuggestion(movieSuggestion.TitleToDisplay);
+                    }
+                }
+            }
+        }
     }
 }

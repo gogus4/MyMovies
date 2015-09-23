@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Gogus.Helper
 {
@@ -57,24 +58,28 @@ namespace Gogus.Helper
             {
                 try
                 {
-                    string titleFile = movie.Name.Replace("_FR.avi", "");
-                    titleFile = titleFile.Replace("_FR.mkv", "");
-                    titleFile = titleFile.Replace("_FR.mp4", "");
+                    string titleFile = movie.Name.Replace("_FR.avi", "").Replace("_FR.mkv", "").Replace("_FR.mp4", "");
 
                     var result = await HttpRequestHelper.Instance.FillObjectWithJson<TemplateWebService>(new TemplateWebService(), "https://api.themoviedb.org/3/search/movie?api_key=d2462a6f978e52644f316b154b5c41ba&language=fr&query=" + titleFile);
 
                     if (result.results.Count > 0)
                     {
-                        result.results[0].poster_path = "http://image.tmdb.org/t/p/w500" + result.results[0].poster_path;
+                        if (result.results[0].poster_path != null)
+                        {
+                            result.results[0].poster_path = "http://image.tmdb.org/t/p/w500" + result.results[0].poster_path;
+                            await HttpRequestHelper.Instance.DownloadFileAsync(new Uri(result.results[0].poster_path), titleFile + ".jpg");
+
+                            var file = await ApplicationData.Current.LocalFolder.GetFileAsync(titleFile + ".jpg");
+                            await result.results[0].SetSource(file);
+                        }
 
                         // Using for DB
-                        var genre = result.results[0].genre != null ? result.results[0].genre_ids[0] : "";
+                        var genre = result.results[0].genre_ids.Count > 0 ? result.results[0].genre_ids[0] : "";
 
-                        //result.results[0].genre = result.results[0].genre_ids[0];
-
-                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault() != null ? MainPageViewModel.Instance.Categories.Where(x => x.id == result.results[0].genre).FirstOrDefault().name : "Inclassable";
+                        result.results[0].Category = MainPageViewModel.Instance.Categories.Where(x => x.id == genre).FirstOrDefault() != null ? MainPageViewModel.Instance.Categories.Where(x => x.id == genre).FirstOrDefault().name : "Inclassable";
                         result.results[0].Path = movie.Path;
                         result.results[0].Name = movie.Name;
+                        result.results[0].TitleToDisplay = titleFile;
 
                         MainPageViewModel.Instance.Movies.Add(result.results[0]);
                         SQLiteHelper.Instance.InsertMovieDB(result.results[0]);
@@ -82,7 +87,9 @@ namespace Gogus.Helper
 
                     else
                     {
+                        movie.TitleToDisplay = titleFile;
                         movie.Category = "Inclassable";
+
                         MainPageViewModel.Instance.Movies.Add(movie);
                         SQLiteHelper.Instance.InsertMovieDB(movie);
                     }

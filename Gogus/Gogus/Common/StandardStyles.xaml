@@ -991,7 +991,7 @@
                 <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="{Binding poster_path}" Grid.Column="0" Stretch="Fill"/>
+            <Image Source="{Binding Poster}" Grid.Column="0" Stretch="Fill"/>
 
             <Grid Grid.Column="1" >
                 <TextBlock Text="{Binding title}" Margin="8,30,0,0" TextWrapping="Wrap" FontFamily="Malgun Gothic Semilight" FontSize="12" FontWeight="SemiBold" Foreground="LightGray"/>

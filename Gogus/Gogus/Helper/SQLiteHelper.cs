@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Gogus.Helper
 {
@@ -71,7 +72,8 @@ namespace Gogus.Helper
                         RowSpan = movie.RowSpan,
                         Template = movie.Template,
                         title = movie.title,
-                        vote_average = movie.vote_average
+                        vote_average = movie.vote_average,
+                        TitleToDisplay = movie.TitleToDisplay
                     }
                     );
 
@@ -86,7 +88,7 @@ namespace Gogus.Helper
             }
         }
 
-        public async void DeleteMoviesDB()
+        public void DeleteMoviesDB()
         {
             using (var db = new SQLite.SQLiteConnection(DBPath))
             {
@@ -105,6 +107,18 @@ namespace Gogus.Helper
                     var d = from x in db.Table<Movie>() select x;
                     foreach (var sd in d)
                     {
+                        string titleFile = sd.Name.Replace("_FR.avi", "").Replace("_FR.mkv", "").Replace("_FR.mp4", "");
+
+                        try
+                        {
+                            var file = await ApplicationData.Current.LocalFolder.GetFileAsync(titleFile + ".jpg");
+                            await sd.SetSource(file);
+                        }
+                        catch (Exception E)
+                        {
+
+                        }
+
                         movies.Add(sd);
                     }
 
