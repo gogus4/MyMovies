@@ -52,14 +52,6 @@ namespace Gogus
             }
 #endif
 
-            await SQLiteHelper.Instance.CreateTableMovieDB();
-            MainPageViewModel.Instance.Movies = await SQLiteHelper.Instance.GetMoviesDB();
-
-            if (MainPageViewModel.Instance.Movies == null)
-                MainPageViewModel.Instance.Movies = new List<Movie>();
-
-            await MainPageViewModel.Instance.GetDatas();
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -71,13 +63,21 @@ namespace Gogus
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if(e.PreviousExecutionState != ApplicationExecutionState.Running)
                 {
-                    //TODO: Load state from previously suspended application
+                    bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
+                    ExtendedSplash extendedSplash = new ExtendedSplash(e.SplashScreen, loadState);
+                    rootFrame.Content = extendedSplash;
+                    Window.Current.Content = rootFrame;
                 }
 
+                /*if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                {
+                    //TODO: Load state from previously suspended application
+                }*/
+
                 // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+                //Window.Current.Content = rootFrame;
             }
 
             if (rootFrame.Content == null)

@@ -62,7 +62,7 @@
                 <Image Source="ms-appx:///Assets/MainLogo.png" Height="65" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
 
                 <StackPanel Orientation="Horizontal" Background="White" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <SearchBox x:Name="SearchMovie" Visibility="Collapsed" FontFamily="Segoe UI Light" BorderBrush="Transparent" FontSize="16" Width="250" Tapped="SearchMovie_Tapped" SuggestionsRequested="SearchMovie_SuggestionsRequested"/>
+                    <SearchBox x:Name="SearchMovie" Visibility="Collapsed" FontFamily="Segoe UI Light" BorderBrush="Transparent" FontSize="16" Width="250" Tapped="SearchMovie_Tapped" SuggestionsRequested="SearchMovie_SuggestionsRequested" QuerySubmitted="SearchMovie_QuerySubmitted"/>
                     <Button x:Name="ActionSearchMovie" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Center" Background="Black" Foreground="White" Content="&#xe11a;" FontSize="16" Tapped="ActionSearchMovie_Tapped"/>
                 </StackPanel>
 

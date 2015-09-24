@@ -73,5 +73,11 @@ namespace Gogus.View
                 }
             }
         }
+
+        private void SearchMovie_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            MainPageViewModel.Instance.CurrentMovie = MainPageViewModel.Instance.Movies.Where(x => x.TitleToDisplay == args.QueryText).FirstOrDefault();
+            this.Frame.Navigate(typeof(ViewMovie));
+        }
     }
 }
