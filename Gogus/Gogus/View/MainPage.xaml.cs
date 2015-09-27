@@ -79,5 +79,13 @@ namespace Gogus.View
             MainPageViewModel.Instance.CurrentMovie = MainPageViewModel.Instance.Movies.Where(x => x.TitleToDisplay == args.QueryText).FirstOrDefault();
             this.Frame.Navigate(typeof(ViewMovie));
         }
+
+        private void Search_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var moviesByCategories = MainPageViewModel.Instance.Movies.Where(x => x.Category == "Action").OrderBy(x => x.title).GroupBy(x => x.Category)
+                    .Select(x => new MovieCategory { Title = x.Key, Items = x.ToList() });
+
+            MainPageViewModel.Instance.Items = moviesByCategories.OrderBy(x => x.Title).ToList();
+        }
     }
 }

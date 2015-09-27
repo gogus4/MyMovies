@@ -2,12 +2,13 @@
 using Gogus.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gogus.ViewModel
 {
-    public class MainPageViewModel
+    public class MainPageViewModel : INotifyPropertyChanged
     {
         public List<Movie> Movies { get; set; }
         public List<Movie> MoviesDB { get; set; }
@@ -26,7 +27,19 @@ namespace Gogus.ViewModel
             }
         }
 
-        public List<MovieCategory> Items { get; set; }
+        private List<MovieCategory> _Items;
+        public List<MovieCategory> Items
+        {
+            get
+            {
+                return _Items;
+            }
+            set
+            {
+                this._Items = value;
+                this.OnPropertyChanged("Items");
+            }
+        }
 
         public Movie CurrentMovie { get; set; }
 
@@ -53,10 +66,22 @@ namespace Gogus.ViewModel
 
                 return true;
             }
-            catch(Exception E)
+            catch (Exception E)
             {
                 return false;
             }
         }
+
+        #region Event PropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
     }
 }
